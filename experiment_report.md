@@ -1,6 +1,6 @@
 # Experiment Report: Data Quality Impact on AI Agent
 
-**Student ID:** AI20K-XXXX
+**Student ID:** 2A202600385
 **Name:** Ngô Hải Văn
 **Date:** 2026-04-15
 
