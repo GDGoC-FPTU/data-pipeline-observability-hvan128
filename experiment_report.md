@@ -1,35 +1,42 @@
 # Experiment Report: Data Quality Impact on AI Agent
 
 **Student ID:** AI20K-XXXX
-**Name:** (Dien ten cua ban)
-**Date:** (Dien ngay thuc hien)
+**Name:** Ngô Hải Văn
+**Date:** 2026-04-15
 
 ---
 
-## 1. Ket qua thi nghiem
+## 1. Kết quả thí nghiệm
 
-Chay `agent_simulation.py` voi 2 bo du lieu va ghi lai ket qua:
+Chạy `agent_simulation.py` với 2 bộ dữ liệu và ghi lại kết quả:
 
 | Scenario | Agent Response | Accuracy (1-10) | Notes |
 |----------|----------------|-----------------|-------|
-| Clean Data (`processed_data.csv`) | (Ghi cau tra loi cua Agent) | | |
-| Garbage Data (`garbage_data.csv`) | (Ghi cau tra loi cua Agent) | | |
+| Clean Data (`processed_data.csv`) | "the best choice is Laptop at $1200" | 9 | Kết quả hợp lý, Laptop là sản phẩm electronics đắt nhất trong dữ liệu sạch |
+| Garbage Data (`garbage_data.csv`) | "the best choice is Nuclear Reactor at $999999" | 1 | Kết quả sai hoàn toàn do outlier cực đoan trong dữ liệu rác |
 
 ---
 
-## 2. Phan tich & nhan xet
+## 2. Phân tích & nhận xét
 
-### Tai sao Agent tra loi sai khi dung Garbage Data?
+### Tai sao / Phan tich: Tại sao Agent trả lời sai khi dùng Garbage Data?
 
-(Viet nhan xet cua ban o day — it nhat 50 tu)
+Khi sử dụng dữ liệu rác (`garbage_data.csv`), Agent đã đưa ra câu trả lời hoàn toàn sai lệch vì dữ liệu đầu vào chứa nhiều vấn đề nghiêm trọng về chất lượng.
 
-(Hay phan tich cac van de nhu Duplicate IDs, wrong data types, outliers, null values
-va giai thich tai sao chung anh huong den ket qua cua Agent.)
+Thứ nhất, **Duplicate IDs**: record id=1 xuất hiện hai lần (Laptop và Banana), gây nhầm lẫn khi truy vấn và có thể dẫn đến kết quả không nhất quán.
+
+Thứ hai, **Wrong data types**: sản phẩm "Broken Chair" có giá là chuỗi "ten dollars" thay vì số, khiến các phép tính số học bị lỗi hoặc bị bỏ qua.
+
+Thứ ba, **Extreme Outlier**: "Nuclear Reactor" có giá $999,999 — một giá trị bất thường cực đoan. Agent chọn sản phẩm có giá cao nhất nên đã chọn nhầm outlier này làm "best choice", mặc dù đây rõ ràng là dữ liệu không đáng tin cậy.
+
+Thứ tư, **Null values**: record cuối có id=None và category=None, gây ra lỗi khi lọc dữ liệu theo category.
+
+Tóm lại, dù logic của Agent hoàn toàn đúng, nhưng vì dữ liệu đầu vào bị "nhiễm độc", kết quả trả ra vẫn sai. Đây là minh chứng rõ ràng cho nguyên tắc "Garbage In, Garbage Out" trong khoa học dữ liệu.
 
 ---
 
-## 3. Ket luan
+## 3. Kết luận
 
-**Quality Data > Quality Prompt?** (Dong y hay khong? Giai thich ngan gon.)
+**Quality Data > Quality Prompt?** — Đồng ý hoàn toàn.
 
-(Viet ket luan cua ban o day)
+Dù Agent có logic tốt và prompt rõ ràng, nếu dữ liệu đầu vào kém chất lượng thì kết quả vẫn sai. Việc xây dựng pipeline ETL với bước Validate kỹ lưỡng là nền tảng bắt buộc trước khi đưa dữ liệu vào bất kỳ hệ thống AI nào. Chất lượng dữ liệu quyết định chất lượng kết quả — không có prompt nào có thể bù đắp cho dữ liệu xấu.
